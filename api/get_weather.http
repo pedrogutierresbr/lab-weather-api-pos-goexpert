@@ -1,0 +1,14 @@
+# Success
+GET http://localhost:8000/weather/12220790 HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+
+# Error: invalid zipcode
+GET http://localhost:8000/weather/0000000000 HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+
+# Error: can not find zipcode
+GET http://localhost:8000/weather/99999999 HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
