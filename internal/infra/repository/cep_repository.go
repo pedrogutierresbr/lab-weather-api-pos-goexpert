@@ -27,7 +27,7 @@ func (r *CEPRepository) GetCEP(cep string) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("https:viacep.com.br/ws/%s/json/", cep), nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("https://viacep.com.br/ws/%s/json/", cep), nil)
 	if err != nil {
 		log.Printf("Falha ao criar requisição HTTP: %v", err)
 		return nil, err
