@@ -1,6 +1,10 @@
 package usecase
 
-import "github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/entity"
+import (
+	"errors"
+
+	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/entity"
+)
 
 type CEPInputDTO struct {
 	CEP string
@@ -21,4 +25,45 @@ type CEPOutputDTO struct {
 
 type GetCEPUsecase struct {
 	CEPRepository entity.CEPRepositoryInterface
+}
+
+func NewCepUseCase(cepRepository entity.CEPRepositoryInterface) *GetCEPUsecase {
+	return &GetCEPUsecase{
+		CEPRepository: cepRepository,
+	}
+}
+
+func (c *GetCEPUsecase) Execute(input CEPInputDTO) (CEPOutputDTO, error) {
+	cep := entity.CEP{
+		CEP: input.CEP,
+	}
+
+	isValidCEP := c.CEPRepository.IsValidCEP(cep.CEP)
+	if !isValidCEP {
+		return CEPOutputDTO{}, errors.New("CEP inválido")
+	}
+
+	response, err := c.CEPRepository.GetCEP(cep.CEP)
+	if err != nil {
+		return CEPOutputDTO{}, err
+	}
+
+	cepOutput, err := c.CEPRepository.ConvertResponse(response)
+	if err != nil {
+		return CEPOutputDTO{}, err
+	}
+
+	dto := CEPOutputDTO{
+		CEP:         cepOutput.CEP,
+		Logradouro:  cepOutput.Logradouro,
+		Complemento: cepOutput.Complemento,
+		Bairro:      cepOutput.Bairro,
+		Localidade:  cepOutput.Localidade,
+		UF:          cepOutput.UF,
+		IBGE:        cepOutput.IBGE,
+		GIA:         cepOutput.GIA,
+		DDD:         cepOutput.DDD,
+		SIAFI:       cepOutput.SIAFI,
+	}
+	return dto, nil
 }
