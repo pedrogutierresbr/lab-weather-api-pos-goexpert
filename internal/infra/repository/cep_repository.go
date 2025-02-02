@@ -40,9 +40,9 @@ func (r *CEPRepository) GetCEP(cep string) ([]byte, error) {
 	}
 	defer res.Body.Close()
 
-	ctx_err := ctx.Err()
-	if ctx_err != nil {
-		log.Printf("Timeout ao realizar requisição HTTP: %v", ctx_err)
+	ctxErr := ctx.Err()
+	if ctxErr != nil {
+		log.Printf("Timeout ao realizar requisição HTTP: %v", ctxErr)
 		return nil, err
 	}
 
@@ -59,7 +59,7 @@ func (r *CEPRepository) ConvertResponse(cep_data []byte) (*entity.CEP, error) {
 	var cep entity.CEP
 	err := json.Unmarshal(cep_data, &cep)
 	if err != nil {
-		log.Printf("Falha ao converter resposta HTTP para CEP: %v", err)
+		log.Printf("Falha ao converter resposta HTTP: %v", err)
 		return nil, err
 	}
 

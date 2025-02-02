@@ -13,12 +13,22 @@ type Weather struct {
 	Kelvin     float64
 }
 
-type WeatherDetails struct {
-	Temperature float64
-}
-
 type WeatherResponse struct {
-	WeatherResponse WeatherDetails
+	Location struct {
+		Name    string  `json:"name"`
+		Region  string  `json:"region"`
+		Country string  `json:"country"`
+		Lat     float64 `json:"lat"`
+		Lon     float64 `json:"lon"`
+	} `json:"location"`
+	Current struct {
+		TempC     float64 `json:"temp_c"`
+		TempF     float64 `json:"temp_f"`
+		Condition struct {
+			Text string `json:"text"`
+			Icon string `json:"icon"`
+		} `json:"condition"`
+	} `json:"current"`
 }
 
 func NewWeather(celsius, fahrenheit, kelvin float64) *Weather {
