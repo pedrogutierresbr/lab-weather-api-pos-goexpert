@@ -13,10 +13,18 @@ import (
 	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/entity"
 )
 
-type WeatherRepository struct{}
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
 
-func NewWeatherRepository() *WeatherRepository {
-	return &WeatherRepository{}
+type WeatherRepository struct {
+	client HTTPClient
+}
+
+func NewWeatherRepository(client HTTPClient) *WeatherRepository {
+	return &WeatherRepository{
+		client: client,
+	}
 }
 
 func (w *WeatherRepository) GetWeather(localidade string, apiKey string) ([]byte, error) {
@@ -31,7 +39,7 @@ func (w *WeatherRepository) GetWeather(localidade string, apiKey string) ([]byte
 		return nil, err
 	}
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := w.client.Do(req)
 	if err != nil {
 		log.Printf("Falha ao realizar requisição HTTP: %v", err)
 		return nil, err

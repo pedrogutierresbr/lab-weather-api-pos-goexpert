@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"errors"
-	"strings"
 
 	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/entity"
 )
@@ -13,9 +12,9 @@ type WeatherInputDTO struct {
 }
 
 type WeatherOutputDTO struct {
-	Celsius   float64 `json:"celsius"`
-	Farenheit float64 `json:"farenheit"`
-	Kelvin    float64 `json:"kelvin"`
+	Celsius    float64 `json:"celsius"`
+	Fahrenheit float64 `json:"fahrenheit"`
+	Kelvin     float64 `json:"kelvin"`
 }
 
 type GetWeatherUsecase struct {
@@ -38,7 +37,7 @@ func (w *GetWeatherUsecase) Execute(input WeatherInputDTO) (WeatherOutputDTO, er
 	}
 
 	weatherResponse, err := w.WeatherRepository.GetWeather(input.Localidade, input.ApiKey)
-	if err != nil || strings.Contains(string(weatherResponse), "city not found") {
+	if err != nil {
 		return WeatherOutputDTO{}, errors.New("falha ao recuperar a temperatura")
 	}
 
@@ -53,9 +52,9 @@ func (w *GetWeatherUsecase) Execute(input WeatherInputDTO) (WeatherOutputDTO, er
 	}
 
 	dto := WeatherOutputDTO{
-		Celsius:   weatherConverted.Celsius,
-		Farenheit: weatherConverted.Fahrenheit,
-		Kelvin:    weatherConverted.Kelvin,
+		Celsius:    weatherConverted.Celsius,
+		Fahrenheit: weatherConverted.Fahrenheit,
+		Kelvin:     weatherConverted.Kelvin,
 	}
 
 	return dto, nil
