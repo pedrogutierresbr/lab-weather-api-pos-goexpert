@@ -9,7 +9,6 @@ O projeto deverá informar ao usuário o clima atual de uma cidade, tendo como p
 
 
 
--- Implementar webserver
 -- Implementar cmd
 -- Implementar docker
 -- Rodar na cloud

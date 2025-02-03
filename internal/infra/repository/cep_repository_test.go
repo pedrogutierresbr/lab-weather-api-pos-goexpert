@@ -9,9 +9,9 @@ import (
 func TestIsValid(t *testing.T) {
 	repo := NewCEPRepository()
 
-	assert.True(t, repo.IsValid("38050600"))
-	assert.False(t, repo.IsValid("380506"))
-	assert.False(t, repo.IsValid("380506000"))
+	assert.True(t, repo.IsValidCEP("38050600"))
+	assert.False(t, repo.IsValidCEP("380506"))
+	assert.False(t, repo.IsValidCEP("380506000"))
 }
 
 func TestGetCEP(t *testing.T) {

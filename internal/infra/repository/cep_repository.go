@@ -19,7 +19,7 @@ func NewCEPRepository() *CEPRepository {
 	return &CEPRepository{}
 }
 
-func (r *CEPRepository) IsValid(cep string) bool {
+func (r *CEPRepository) IsValidCEP(cep string) bool {
 	return cepvalidator.IsValidCEP(cep)
 }
 
