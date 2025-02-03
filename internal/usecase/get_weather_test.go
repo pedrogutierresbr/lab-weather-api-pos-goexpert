@@ -68,7 +68,7 @@ func getWeatherJSON() []byte {
 				"gust_mph": 14.4,
 				"gust_kph": 23.1
 			}
-			}`,
+		}`,
 	)
 }
 

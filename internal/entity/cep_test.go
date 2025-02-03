@@ -7,7 +7,7 @@ import (
 )
 
 func TestNewCEP(t *testing.T) {
-	cep := NewCEP("12220780", "Rua Bapendi", "", "Jardim Ismênia", "São José dos Campos", "SP", "3549904", "6452", "12", "7099")
+	cep := NewCEP("12220780", "Rua Bapendi", "", "Jardim Ismênia", "São José dos Campos", "SP", "São Paulo", "3549904", "6452", "12", "7099")
 
 	assert.Equal(t, cep.CEP, "12220780")
 	assert.Equal(t, cep.Logradouro, "Rua Bapendi")
