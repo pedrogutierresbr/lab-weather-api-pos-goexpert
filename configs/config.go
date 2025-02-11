@@ -1,26 +1,38 @@
 package configs
 
-import "github.com/spf13/viper"
+import (
+	"log"
+	"os"
 
-type conf struct {
-	WebServerPort     string `mapstructure:"WEB_SERVER_PORT"`
-	OpenWeatherAPIKey string `mapstructure:"OPEN_WEATHERMAP_API_KEY"`
+	"github.com/joho/godotenv"
+)
+
+type Config struct {
+	WeatherAPIKey string
 }
 
-func LoadConfig(path string) (*conf, error) {
-	var cfg *conf
-	viper.SetConfigName("app_config")
-	viper.SetConfigType("env")
-	viper.AddConfigPath(path)
-	viper.SetConfigFile(".env")
-	viper.AutomaticEnv()
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(err)
+var config *Config
+
+func LoadConfig() {
+	// Tenta carregar o arquivo .env
+	if err := godotenv.Load(); err != nil {
+		log.Println("Aviso: Não foi possível carregar o arquivo .env (pode estar ausente)")
 	}
-	err = viper.Unmarshal(&cfg)
-	if err != nil {
-		panic(err)
+
+	config = &Config{
+		WeatherAPIKey: os.Getenv("WEATHER_API_KEY"),
 	}
-	return cfg, err
+
+	if config.WeatherAPIKey == "" {
+		log.Fatal("Chave da API do WeatherAPI não configurada (WEATHER_API_KEY)")
+	}
+
+	log.Println("Configurações carregadas com sucesso")
+}
+
+func GetConfig() *Config {
+	if config == nil {
+		log.Fatal("Configurações não carregadas. Certifique-se de chamar LoadConfig antes de GetConfig.")
+	}
+	return config
 }

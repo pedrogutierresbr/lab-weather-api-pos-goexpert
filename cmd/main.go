@@ -1,40 +1,52 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/configs"
-	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/infra/repository"
-	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/infra/web"
-	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/infra/web/webserver"
+	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/repository"
+	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/services"
+	"github.com/pedrogutierresbr/lab-weather-api-pos-goexpert/internal/usecase"
 )
 
-func ConfigureServer() *webserver.WebServer {
-	configs, err := configs.LoadConfig(".")
-	if err != nil {
-		panic(err)
-	}
-
-	webserver := webserver.NewWebServer(configs.WebServerPort)
-
-	cepRepo := repository.NewCEPRepository()
-	weatherRepo := repository.NewWeatherRepository(&http.Client{})
-
-	openWeatherMapAPIKey := configs.OpenWeatherAPIKey
-	if openWeatherMapAPIKey == "" {
-		log.Fatal("Please, provide the OPEN_WEATHERMAP_API_KEY environment variable. Make sure you provide a valid API key, otherwise it will not be possible to get and convert weather data.")
-	}
-
-	webCEPHandler := web.NewHTTPHandler(cepRepo, weatherRepo, openWeatherMapAPIKey)
-	webserver.AddHandler("GET /cep/{cep}", webCEPHandler.Get)
-
-	return webserver
-}
-
 func main() {
-	webserver := ConfigureServer()
-	fmt.Println("Starting web server on port", ":8080")
-	webserver.Start()
+	// Verifica se a API key está definida no ambiente
+	configs.LoadConfig()
+	cfg := configs.GetConfig()
+
+	// Inicializa os repositórios e serviços
+	zipCodeRepo := repository.NewZipCodeRepository()
+	weatherService := services.NewWeatherService(cfg.WeatherAPIKey)
+	weatherUseCase := usecase.NewWeatherUseCase(zipCodeRepo, weatherService)
+
+	// Define a rota para a API
+	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
+		zipCode := r.URL.Query().Get("cep") // Altere para capturar "cep" corretamente
+		if zipCode == "" {
+			http.Error(w, "O parâmetro 'cep' é obrigatório", http.StatusBadRequest)
+			return
+		}
+
+		// Obtém o clima pelo CEP
+		weather, err := weatherUseCase.GetWeatherByZipCode(zipCode)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Retorna a resposta como JSON
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(weather)
+	})
+
+	// Inicializa o servidor
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Porta padrão para desenvolvimento local
+	}
+	log.Printf("Servidor rodando na porta %s...", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
