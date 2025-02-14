@@ -7,20 +7,16 @@ import (
 	"net/http"
 )
 
-// ZipCodeRepository define a interface para o repositório de CEPs
 type ZipCodeRepository interface {
 	GetLocationByZipCode(zipCode string) (*Location, error)
 }
 
-// zipCodeRepository é a implementação concreta da interface ZipCodeRepository
 type zipCodeRepository struct{}
 
-// NewZipCodeRepository cria uma nova instância de zipCodeRepository
 func NewZipCodeRepository() ZipCodeRepository {
 	return &zipCodeRepository{}
 }
 
-// Location representa a estrutura de dados retornada pela API ViaCEP
 type Location struct {
 	Cep         string `json:"cep"`
 	Logradouro  string `json:"logradouro"`
@@ -34,7 +30,6 @@ type Location struct {
 	Siafi       string `json:"siafi"`
 }
 
-// GetLocationByZipCode busca a localização com base no CEP fornecido
 func (r *zipCodeRepository) GetLocationByZipCode(zipCode string) (*Location, error) {
 	url := fmt.Sprintf("https://viacep.com.br/ws/%s/json/", zipCode)
 	resp, err := http.Get(url)

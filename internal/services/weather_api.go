@@ -8,22 +8,18 @@ import (
 	"net/url"
 )
 
-// WeatherService define a interface para o serviço de clima
 type WeatherService interface {
 	GetWeather(location string) (map[string]float64, error)
 }
 
-// weatherAPIService é a implementação do WeatherService
 type weatherAPIService struct {
 	apiKey string
 }
 
-// NewWeatherService cria uma nova instância do WeatherService
 func NewWeatherService(apiKey string) WeatherService {
 	return &weatherAPIService{apiKey: apiKey}
 }
 
-// GetWeather busca o clima para uma localização específica
 func (s *weatherAPIService) GetWeather(location string) (map[string]float64, error) {
 	encodedLocation := url.QueryEscape(location)
 	apiURL := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s", s.apiKey, encodedLocation)

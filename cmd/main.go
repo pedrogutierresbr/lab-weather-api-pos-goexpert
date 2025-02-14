@@ -13,40 +13,34 @@ import (
 )
 
 func main() {
-	// Verifica se a API key está definida no ambiente
 	configs.LoadConfig()
 	cfg := configs.GetConfig()
 
-	// Inicializa os repositórios e serviços
 	zipCodeRepo := repository.NewZipCodeRepository()
 	weatherService := services.NewWeatherService(cfg.WeatherAPIKey)
 	weatherUseCase := usecase.NewWeatherUseCase(zipCodeRepo, weatherService)
 
-	// Define a rota para a API
 	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
-		zipCode := r.URL.Query().Get("cep") // Altere para capturar "cep" corretamente
+		zipCode := r.URL.Query().Get("cep")
 		if zipCode == "" {
 			http.Error(w, "O parâmetro 'cep' é obrigatório", http.StatusBadRequest)
 			return
 		}
 
-		// Obtém o clima pelo CEP
 		weather, err := weatherUseCase.GetWeatherByZipCode(zipCode)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		// Retorna a resposta como JSON
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(weather)
 	})
 
-	// Inicializa o servidor
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080" // Porta padrão para desenvolvimento local
+		port = "8080"
 	}
-	log.Printf("Servidor rodando na porta %s...", port)
+	log.Printf("Servidor rodando na porta %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

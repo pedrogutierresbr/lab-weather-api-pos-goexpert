@@ -14,9 +14,8 @@ type Config struct {
 var config *Config
 
 func LoadConfig() {
-	// Tenta carregar o arquivo .env
 	if err := godotenv.Load(); err != nil {
-		log.Println("Aviso: Não foi possível carregar o arquivo .env (pode estar ausente)")
+		log.Println("Aviso: Não foi possível carregar o arquivo .env")
 	}
 
 	config = &Config{
@@ -24,7 +23,7 @@ func LoadConfig() {
 	}
 
 	if config.WeatherAPIKey == "" {
-		log.Fatal("Chave da API do WeatherAPI não configurada (WEATHER_API_KEY)")
+		log.Fatal("Chave da API do WeatherAPI não configurada")
 	}
 
 	log.Println("Configurações carregadas com sucesso")
@@ -32,7 +31,7 @@ func LoadConfig() {
 
 func GetConfig() *Config {
 	if config == nil {
-		log.Fatal("Configurações não carregadas. Certifique-se de chamar LoadConfig antes de GetConfig.")
+		log.Fatal("Configurações não carregadas. Verifique a inicialização das configurações")
 	}
 	return config
 }
