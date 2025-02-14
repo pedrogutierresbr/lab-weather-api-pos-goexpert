@@ -43,7 +43,7 @@ $ git clone https://github.com/pedrogutierresbr/lab-weather-api-pos-goexpert.git
  <br>
   
 
-#### Rodando a aplicação localmente
+#### Executando a aplicação localmente
 ```bash
 
 # Crie um arquivo .env no diretório ./cmd
@@ -68,7 +68,7 @@ $ go run main.go
 
  <br>
 
-#### Rodando a aplicação com docker-compose
+#### Executando a aplicação com docker-compose
 ```bash
 
 # No arquivo docker-compose.yml, inserir sua api key no campo WEATHER_API_KEY: "valor api key"
