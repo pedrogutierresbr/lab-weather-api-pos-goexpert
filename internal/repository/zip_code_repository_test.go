@@ -26,7 +26,7 @@ func TestGetLocationByZipCode_NotFound(t *testing.T) {
 func TestGetLocationByZipCode_InvalidZipCode(t *testing.T) {
 	repo := NewZipCodeRepository()
 
-	_, err := repo.GetLocationByZipCode("123")
+	_, err := repo.GetLocationByZipCode("01153001")
 	assert.Error(t, err)
 	assert.Equal(t, "CEP não encontrado", err.Error())
 }
