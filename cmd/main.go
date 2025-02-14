@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-	configs.LoadConfig()
 	cfg := configs.GetConfig()
 
 	zipCodeRepo := repository.NewZipCodeRepository()

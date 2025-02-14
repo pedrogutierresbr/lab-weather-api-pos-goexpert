@@ -12,5 +12,7 @@ COPY . .
 # Compila o binário
 RUN go build -o main cmd/main.go
 
+EXPOSE 8080
+
 # Executa o binário
 CMD ["./main"]
