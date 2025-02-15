@@ -9,10 +9,10 @@ import (
 func TestGetLocationByZipCode_Success(t *testing.T) {
 	repo := NewZipCodeRepository()
 
-	location, err := repo.GetLocationByZipCode("38050600")
+	location, err := repo.GetLocationByZipCode("12220790")
 	assert.NoError(t, err)
-	assert.Equal(t, "Uberaba", location.Localidade)
-	assert.Equal(t, "Santa Maria", location.Bairro)
+	assert.Equal(t, "São José dos Campos", location.Localidade)
+	assert.Equal(t, "Jardim Ismênia", location.Bairro)
 }
 
 func TestGetLocationByZipCode_NotFound(t *testing.T) {

@@ -24,17 +24,17 @@ func TestWeatherUseCase_GetWeatherByZipCode(t *testing.T) {
 	useCase := NewWeatherUseCase(zipCodeRepo, weatherService)
 
 	t.Run("success", func(t *testing.T) {
-		zipCodeRepo.On("GetLocationByZipCode", "38050600").Return(&repository.Location{
-			Localidade: "Uberaba",
-			Bairro:     "Santa Maria",
+		zipCodeRepo.On("GetLocationByZipCode", "12220790").Return(&repository.Location{
+			Localidade: "São José dos Campos",
+			Bairro:     "Jardim Ismênia",
 		}, nil)
-		weatherService.On("GetWeather", "Santa Maria, Uberaba").Return(map[string]float64{
+		weatherService.On("GetWeather", "Jardim Ismênia, São José dos Campos").Return(map[string]float64{
 			"temp_C": 25.0,
 			"temp_F": 77.0,
 			"temp_K": 298.15,
 		}, nil)
 
-		weather, err := useCase.GetWeatherByZipCode("38050600")
+		weather, err := useCase.GetWeatherByZipCode("12220790")
 
 		assert.NoError(t, err)
 		assert.Equal(t, 25.0, weather["temp_C"])

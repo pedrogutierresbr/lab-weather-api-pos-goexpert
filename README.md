@@ -114,6 +114,15 @@ $ curl http://localhost:8080/weather?cep=38050600
 #### Realizando requisição via endereço ativo
 Aplicação está disponível no Google Cloud Run no seguinte endereço:
 
+https://lab-weather-api-510231468538.us-central1.run.app
+
+```bash
+Para fazer um requisição, basta adicionar /weather?cep={cep} na url.
+
+Exemplo:
+
+https://lab-weather-api-510231468538.us-central1.run.app/weather?cep=38050600
+```
 
 <br>
 
