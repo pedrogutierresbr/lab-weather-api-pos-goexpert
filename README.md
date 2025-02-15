@@ -117,11 +117,11 @@ Aplicação está disponível no Google Cloud Run no seguinte endereço:
 https://lab-weather-api-510231468538.us-central1.run.app
 
 ```bash
-Para fazer um requisição, basta adicionar /weather?cep={cep} na url.
+# Para fazer um requisição, basta adicionar /weather?cep={cep} na url.
 
-Exemplo:
+# Exemplo:
 
-https://lab-weather-api-510231468538.us-central1.run.app/weather?cep=12220810
+$ https://lab-weather-api-510231468538.us-central1.run.app/weather?cep=12220810
 ```
 
 <br>
